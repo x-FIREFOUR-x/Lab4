@@ -7,6 +7,7 @@ class Picture
 {
 	BMP_head head;
 	Pixel_triplet** pixels;
+	int interpolate(int, int, int, int, int, int, int, int, double, double);
 public:
 	void read_picture(string);
 	void write_picture(string);

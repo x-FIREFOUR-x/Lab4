@@ -83,5 +83,11 @@ void Picture::enlarge_picture(int scale)
     int number_all_insignificant = (4 - (head.width * scale * 3 % 4)) * head.height;    // кількість всіх незначемих байтів
     head.biSizeImage = (head.width * head.height * 3) + number_all_insignificant;
     head.fileSize = head.biSizeImage + head.headerSize;
-    
+}
+
+int interpolate(int x1, int y1, int x2, int y2, int z1, int z2, int z3, int z4, double x, double y)
+{
+    double res;
+    res = (z1 / ((x2 - x1) * (y2 - y1))) * (x2 - x) * (y2 - y) + (z2 / ((x2 - x1) * (y2 - y1))) * (x2 - x) * (y - y1) + (z3 / ((x2 - x1) * (y2 - y1))) * (x - x1) * (y2 - y) + (z4 / ((x2 - x1) * (y2 - y1))) * (x - x1) * (y - y1);
+    return round(res);
 }
