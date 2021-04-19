@@ -5,13 +5,6 @@ void  Picture::read_picture(string file_name)
     ifstream fin;
     fin.open(file_name, ios::binary);
     fin.read((char*)& head, sizeof(BMP_head));
-
-    
-    cout << sizeof(BMP_head) << endl;
-    cout << head.id[0] << " " << head.id[1] << " " << head.fileSize << " " << head.reserved[0] << " " << head.reserved[1] << " ";
-    cout << head.headerSize << " " << head.infoSize << " " << head.width << " " << head.height << " " << head.biplanes << " " << head.bitsPixel << " ";
-    cout << head.biCompression << " " << head.biSizeImage << " " << head.biXPelsPerMeter << " " << head.biYPelsPerMeter << " " << head.biClrUsed << " " << head.biClrImportant << endl;
-    
     
     pixels = new Pixel_triplet* [head.height];
     for (int i = 0; i < head.height; i++)
@@ -36,6 +29,7 @@ void  Picture::read_picture(string file_name)
 
     fin.close();
 }
+
 void  Picture:: write_picture(string file_name)
 {
     ofstream fout;
@@ -59,6 +53,7 @@ void  Picture:: write_picture(string file_name)
     
     fout.close();
 }
+
 void Picture::enlarge_picture(int scale)
 {
     Pixel_triplet** new_pixels = new Pixel_triplet* [head.height * scale];
