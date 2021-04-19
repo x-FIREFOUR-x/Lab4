@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstdlib>
 using namespace std;
+
 #pragma pack(push, 1)
 struct BMP_head
 {
