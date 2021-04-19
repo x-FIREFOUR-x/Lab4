@@ -44,59 +44,49 @@ void  Picture:: write_picture(string file_name)
 
     int number_insignificant = 4 - (head.width * 3 % 4);    // кількість байт що потрібно дописати для кратності 4 
     int8_t insignificant = 0;                               // не значемий байт що дописується для кратності 4
-
     for (int i = 0; i < head.height; i++)
     {
         for (int j = 0; j < head.width; j++)
         {
             fout.write((char*)&pixels[i][j], sizeof(Pixel_triplet));
         }
-
+        
         for (int k = 0; k < number_insignificant; k++)
         {
             fout.write((char*)&insignificant, sizeof(int8_t));
         }
     }
-
+    
     fout.close();
 }
 void Picture::enlarge_picture(int scale)
 {
     Pixel_triplet** new_pixels = new Pixel_triplet* [head.height * scale];
-    for (int i = 0; i < head.height; i++)
+    for (int i = 0; i < head.height*scale; i++)
         new_pixels[i] = new Pixel_triplet[head.width * scale];
 
     
 
-    for (int i = 0; i < head.height; i++)
+    for (int i = 0; i < head.height*scale; i++)
     {
-        for (int j = 0; j < head.width; j++)
+        for (int j = 0; j < head.width*scale; j++)
         {
-            for (int k = 0; k < scale; k++)
-            {
-                new_pixels[i*scale][j * scale + k] = pixels[i][j];
-                cout << i << " " << j << endl;
-            }
-        }
-
-        for (int p = 1; p < scale; p++)
-        {
-            new_pixels[i * scale + p] = new_pixels[i*scale];
+            new_pixels[i][j] = pixels[i / scale][j / scale];
         }
     }
-
+    
     for (int i = 0; i < head.height; i++)
         delete[] pixels[i];
     delete[] pixels;
-
+    
     pixels = new_pixels;
     new_pixels = nullptr;
 
     head.width = head.width * scale;
     head.height = head.height * scale;
-
+    
     int number_all_insignificant = (4 - (head.width * scale * 3 % 4)) * head.height;    // кількість всіх незначемих байтів
     head.biSizeImage = (head.width * head.height * 3) + number_all_insignificant;
     head.fileSize = head.biSizeImage + head.headerSize;
-
+    
 }
