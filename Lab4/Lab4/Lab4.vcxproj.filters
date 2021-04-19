@@ -18,9 +18,15 @@
     <ClCompile Include="Lab4.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="Picture.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BMPstruct.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Picture.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
