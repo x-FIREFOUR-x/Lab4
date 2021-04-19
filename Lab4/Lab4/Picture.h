@@ -10,5 +10,6 @@ class Picture
 public:
 	void read_picture(string);
 	void write_picture(string);
+	void enlarge_picture(int);
 };
 
