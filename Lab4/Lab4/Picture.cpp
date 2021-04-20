@@ -98,30 +98,59 @@ void Picture::enlarge_picture(double scale)
     int newHeight = head.height * scale;
     int newWidth = head.width * scale;
     Pixel_triplet** new_pixels = new Pixel_triplet * [newHeight];
+
     for (int i = 0; i < newHeight; i++)
         new_pixels[i] = new Pixel_triplet[newWidth];
 
+    double koefx = (double)(head.width - 1) / (newWidth - 1);
+    double koefy = (double)(head.height - 1) / (newHeight - 1);
 
-
-    for (int i = 0; i < newHeight - trunc(scale); i++)
+    for (int i = 0; i < newHeight - 1; i++)
     {
-        for (int j = 0; j < newWidth - trunc(scale); j++)
+        for (int j = 0; j < newHeight - 1; j++)
         {
             int x1, y1, x2, y2, z1, z2, z3, z4;
             double x, y;
-            x1 = (int)(j / scale);
-            y1 = (int)(i / scale);
-            x2 = (int)(j / scale) + 1;
-            y2 = (int)(i / scale)  + 1;
-            x = (float)j / scale;
-            y = (float)i / scale;
+            x1 = (int)(j * koefx);
+            y1 = (int)(i * koefy);
+            x2 = (int)(j * koefx) + 1;
+            y2 = (int)(i * koefy) + 1;
+            x = j * koefx;
+            y = i * koefy;
             new_pixels[i][j].blueComponent = interpolate(x1, y1, x2, y2, pixels[y1][x1].blueComponent, pixels[y2][x1].blueComponent, pixels[y1][x2].blueComponent, pixels[y2][x2].blueComponent, x, y);
             new_pixels[i][j].redComponent = interpolate(x1, y1, x2, y2, pixels[y1][x1].redComponent, pixels[y2][x1].redComponent, pixels[y1][x2].redComponent, pixels[y2][x2].redComponent, x, y);
             new_pixels[i][j].greenComponent = interpolate(x1, y1, x2, y2, pixels[y1][x1].greenComponent, pixels[y2][x1].greenComponent, pixels[y1][x2].greenComponent, pixels[y2][x2].greenComponent, x, y);
-            
+
         }
     }
-
+    for (int i = 0; i < newWidth - 1; i++)
+    {
+        int x1, y1, x2, y2, z1, z2, z3, z4;
+        double x, y;
+        x1 = (int)(i * koefx);
+        y1 = (int)((newHeight - 1) * koefy) - 1;
+        x2 = (int)(i * koefx) + 1;
+        y2 = (int)((newHeight - 1) * koefy);
+        x = i * koefx;
+        y = (newHeight - 1) * koefy - 1;
+        new_pixels[(newHeight - 1)][i].blueComponent = interpolate(x1, y1, x2, y2, pixels[y1][x1].blueComponent, pixels[y2][x1].blueComponent, pixels[y1][x2].blueComponent, pixels[y2][x2].blueComponent, x, y);
+        new_pixels[(newHeight - 1)][i].redComponent = interpolate(x1, y1, x2, y2, pixels[y1][x1].redComponent, pixels[y2][x1].redComponent, pixels[y1][x2].redComponent, pixels[y2][x2].redComponent, x, y);
+        new_pixels[(newHeight - 1)][i].greenComponent = interpolate(x1, y1, x2, y2, pixels[y1][x1].greenComponent, pixels[y2][x1].greenComponent, pixels[y1][x2].greenComponent, pixels[y2][x2].greenComponent, x, y);
+    }
+    for (int i = 0; i < newHeight - 1; i++)
+    {
+        int x1, y1, x2, y2, z1, z2, z3, z4;
+        double x, y;
+        x1 = (int)((newWidth - 1) * koefx) - 1;
+        y1 = (int)(i * koefy);
+        x2 = (int)((newWidth - 1) * koefx);
+        y2 = (int)(i * koefy) + 1;
+        x = (newWidth - 1) * koefx;
+        y = i * koefy;
+        new_pixels[i][(newWidth - 1)].blueComponent = interpolate(x1, y1, x2, y2, pixels[y1][x1].blueComponent, pixels[y2][x1].blueComponent, pixels[y1][x2].blueComponent, pixels[y2][x2].blueComponent, x, y);
+        new_pixels[i][(newWidth - 1)].redComponent = interpolate(x1, y1, x2, y2, pixels[y1][x1].redComponent, pixels[y2][x1].redComponent, pixels[y1][x2].redComponent, pixels[y2][x2].redComponent, x, y);
+        new_pixels[i][(newWidth - 1)].greenComponent = interpolate(x1, y1, x2, y2, pixels[y1][x1].greenComponent, pixels[y2][x1].greenComponent, pixels[y1][x2].greenComponent, pixels[y2][x2].greenComponent, x, y);
+    }
     for (int i = 0; i < head.height; i++)
         delete[] pixels[i];
     delete[] pixels;
