@@ -27,8 +27,8 @@ struct BMP_head
 #pragma pack(push, 1)
 struct Pixel_triplet
 {
-	int8_t redComponent;
-	int8_t greenComponent;
-	int8_t blueComponent;
+	uint8_t redComponent;
+	uint8_t greenComponent;
+	uint8_t blueComponent;
 };
 #pragma pack(pop)
