@@ -123,6 +123,34 @@ void Picture::enlarge_picture(double scale)
 
         }
     }
+    for (int i = 0; i < newWidth - 1; i++)
+    {
+        int x1, y1, x2, y2, z1, z2, z3, z4;
+        double x, y;
+        x1 = (int)(i * koefx);
+        y1 = (int)((newHeight - 1) * koefy) - 1;
+        x2 = (int)(i * koefx) + 1;
+        y2 = (int)((newHeight - 1) * koefy);
+        x = i * koefx;
+        y = (newHeight - 1) * koefy - 1;
+        new_pixels[(newHeight - 1)][i].blueComponent = interpolate(x1, y1, x2, y2, pixels[y1][x1].blueComponent, pixels[y2][x1].blueComponent, pixels[y1][x2].blueComponent, pixels[y2][x2].blueComponent, x, y);
+        new_pixels[(newHeight - 1)][i].redComponent = interpolate(x1, y1, x2, y2, pixels[y1][x1].redComponent, pixels[y2][x1].redComponent, pixels[y1][x2].redComponent, pixels[y2][x2].redComponent, x, y);
+        new_pixels[(newHeight - 1)][i].greenComponent = interpolate(x1, y1, x2, y2, pixels[y1][x1].greenComponent, pixels[y2][x1].greenComponent, pixels[y1][x2].greenComponent, pixels[y2][x2].greenComponent, x, y);
+    }
+    for (int i = 0; i < newHeight - 1; i++)
+    {
+        int x1, y1, x2, y2, z1, z2, z3, z4;
+        double x, y;
+        x1 = (int)((newWidth - 1) * koefx) - 1;
+        y1 = (int)(i * koefy);
+        x2 = (int)((newWidth - 1) * koefx);
+        y2 = (int)(i * koefy) + 1;
+        x = (newWidth - 1) * koefx;
+        y = i * koefy;
+        new_pixels[i][(newWidth - 1)].blueComponent = interpolate(x1, y1, x2, y2, pixels[y1][x1].blueComponent, pixels[y2][x1].blueComponent, pixels[y1][x2].blueComponent, pixels[y2][x2].blueComponent, x, y);
+        new_pixels[i][(newWidth - 1)].redComponent = interpolate(x1, y1, x2, y2, pixels[y1][x1].redComponent, pixels[y2][x1].redComponent, pixels[y1][x2].redComponent, pixels[y2][x2].redComponent, x, y);
+        new_pixels[i][(newWidth - 1)].greenComponent = interpolate(x1, y1, x2, y2, pixels[y1][x1].greenComponent, pixels[y2][x1].greenComponent, pixels[y1][x2].greenComponent, pixels[y2][x2].greenComponent, x, y);
+    }
     for (int i = 0; i < head.height; i++)
         delete[] pixels[i];
     delete[] pixels;
