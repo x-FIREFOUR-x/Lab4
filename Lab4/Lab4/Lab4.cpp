@@ -1,25 +1,30 @@
 ﻿#include <iostream>
 #include <fstream>
+#include <string>
 #include "Picture.h"
 
 using namespace std;
-int main()
+int main(int argc, char* argv[])
 {
-    string fin, fout;
-    cout << "input mane file read: ";
-    cin >> fin;
-    cout << "input mane file write: ";
-    cin >> fout;
-    cout << fin << " " << fout << endl;
-    double scale;
-    cout << "input scale: ";
-    cin >> scale;
-    Picture a;
-    a.read_picture(fin);
-    a.enlarge_picture(scale);
-    a.write_picture(fout);
+    if (argc != 4)
+    {
+        cout << "error!" << endl;
+        return -1;
+    }
+   
+    string fin = argv[1];
+    string fout = argv[2];
+    double scale = stod(argv[3]);
 
+    Picture pict;
+    pict.read_picture(fin);
+    pict.enlarge_picture(scale);
+    pict.write_picture(fout);
 
+    cout << "Enlarging image " << scale << " times... Done." << endl;
+    cout << "Written result to " << fout << endl;
+
+    system("pause");
     return 0;
 }
 
