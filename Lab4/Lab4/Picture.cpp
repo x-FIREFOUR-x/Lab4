@@ -37,6 +37,9 @@ void  Picture:: write_picture(string file_name)
     fout.write((char*)&head, sizeof(BMP_head));
 
     int number_insignificant = 4 - (head.width * 3 % 4);    // кількість байт що потрібно дописати для кратності 4 
+    if (number_insignificant == 4)
+        number_insignificant = 0;
+
     int8_t insignificant = 0;                               // не значемий байт що дописується для кратності 4
     for (int i = 0; i < head.height; i++)
     {
@@ -81,6 +84,9 @@ void Picture::enlarge_picture(int scale)
     head.height = head.height * scale;
     
     int number_all_insignificant = (4 - (head.width * scale * 3 % 4)) * head.height;    // кількість всіх незначемих байтів
+    if (number_all_insignificant % 4 == 0)
+        number_all_insignificant = 0;
+
     head.biSizeImage = (head.width * head.height * 3) + number_all_insignificant;
     head.fileSize = head.biSizeImage + head.headerSize;
 }
