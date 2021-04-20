@@ -12,6 +12,8 @@ void  Picture::read_picture(string file_name)
 
     int number_insignificant = 4 - (head.width * 3 % 4);    // кількість байт що дописані для кратності 4 
     int8_t insignificant;                                   // не значемий байт дописаний для кратності 4
+    if (number_insignificant == 4)
+        number_insignificant = 0;
 
     for (int i = 0; i < head.height; i++)
     {
@@ -40,7 +42,7 @@ void  Picture:: write_picture(string file_name)
     if (number_insignificant == 4)
         number_insignificant = 0;
 
-    int8_t insignificant = 0;                               // не значемий байт що дописується для кратності 4
+    uint8_t insignificant = 0;                               // не значемий байт що дописується для кратності 4
     for (int i = 0; i < head.height; i++)
     {
         for (int j = 0; j < head.width; j++)
@@ -83,7 +85,7 @@ void Picture::enlarge_picture(int scale)
     head.width = head.width * scale;
     head.height = head.height * scale;
     
-    int number_all_insignificant = (4 - (head.width * scale * 3 % 4)) * head.height;    // кількість всіх незначемих байтів
+    int number_all_insignificant = (4 - (head.width * 3 % 4)) * head.height;    // кількість всіх незначемих байтів
     if (number_all_insignificant % 4 == 0)
         number_all_insignificant = 0;
 
@@ -130,9 +132,9 @@ void Picture::enlarge_picture(double scale)
     head.width = newWidth;
     head.height = newHeight;
 
-    int number_all_insignificant = (int)(4 - (((int)(head.width * scale)) * 3) % 4) * head.height;    // кількість всіх незначемих байтів
+    int number_all_insignificant = (4 - ((head.width  * 3) % 4)) * head.height;    // кількість всіх незначемих байтів
 
-    if (number_all_insignificant % 4 == 0)
+    if (((number_all_insignificant / head.height) % 4) == 0)
         number_all_insignificant = 0;
 
     head.biSizeImage = (head.width * head.height * 3) + number_all_insignificant;
