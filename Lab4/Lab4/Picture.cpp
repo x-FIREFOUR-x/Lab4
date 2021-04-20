@@ -91,9 +91,57 @@ void Picture::enlarge_picture(int scale)
     head.fileSize = head.biSizeImage + head.headerSize;
 }
 
-int interpolate(int x1, int y1, int x2, int y2, int z1, int z2, int z3, int z4, double x, double y)
+void Picture::enlarge_picture(double scale)
+{
+    int newHeight = head.height * scale;
+    int newWidth = head.width * scale;
+    Pixel_triplet** new_pixels = new Pixel_triplet * [newHeight];
+    for (int i = 0; i < newHeight; i++)
+        new_pixels[i] = new Pixel_triplet[newWidth];
+
+
+
+    for (int i = 0; i < newHeight - trunc(scale); i++)
+    {
+        for (int j = 0; j < newWidth - trunc(scale); j++)
+        {
+            int x1, y1, x2, y2, z1, z2, z3, z4;
+            double x, y;
+            x1 = (int)(j / scale);
+            y1 = (int)(i / scale);
+            x2 = (int)(j / scale) + 1;
+            y2 = (int)(i / scale)  + 1;
+            x = (float)j / scale;
+            y = (float)i / scale;
+            new_pixels[i][j].blueComponent = interpolate(x1, y1, x2, y2, pixels[y1][x1].blueComponent, pixels[y2][x1].blueComponent, pixels[y1][x2].blueComponent, pixels[y2][x2].blueComponent, x, y);
+            new_pixels[i][j].redComponent = interpolate(x1, y1, x2, y2, pixels[y1][x1].redComponent, pixels[y2][x1].redComponent, pixels[y1][x2].redComponent, pixels[y2][x2].redComponent, x, y);
+            new_pixels[i][j].greenComponent = interpolate(x1, y1, x2, y2, pixels[y1][x1].greenComponent, pixels[y2][x1].greenComponent, pixels[y1][x2].greenComponent, pixels[y2][x2].greenComponent, x, y);
+            
+        }
+    }
+
+    for (int i = 0; i < head.height; i++)
+        delete[] pixels[i];
+    delete[] pixels;
+
+    pixels = new_pixels;
+    new_pixels = nullptr;
+
+    head.width = newWidth;
+    head.height = newHeight;
+
+    int number_all_insignificant = (int)(4 - (((int)(head.width * scale)) * 3) % 4) * head.height;    // кількість всіх незначемих байтів
+
+    if (number_all_insignificant % 4 == 0)
+        number_all_insignificant = 0;
+
+    head.biSizeImage = (head.width * head.height * 3) + number_all_insignificant;
+    head.fileSize = head.biSizeImage + head.headerSize;
+}
+
+uint8_t Picture::interpolate(double x1, double y1, double x2, double y2, double z11, double z12, double z21, double z22, double x, double y)
 {
     double res;
-    res = (z1 / ((x2 - x1) * (y2 - y1))) * (x2 - x) * (y2 - y) + (z2 / ((x2 - x1) * (y2 - y1))) * (x2 - x) * (y - y1) + (z3 / ((x2 - x1) * (y2 - y1))) * (x - x1) * (y2 - y) + (z4 / ((x2 - x1) * (y2 - y1))) * (x - x1) * (y - y1);
-    return round(res);
+    res = (z11 / ((x2 - x1) * (y2 - y1))) * (x2 - x) * (y2 - y) + (z12 / ((x2 - x1) * (y2 - y1))) * (x2 - x) * (y - y1) + (z21 / ((x2 - x1) * (y2 - y1))) * (x - x1) * (y2 - y) + (z22 / ((x2 - x1) * (y2 - y1))) * (x - x1) * (y - y1);
+    return (uint8_t)res;
 }

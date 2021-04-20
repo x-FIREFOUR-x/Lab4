@@ -11,7 +11,7 @@ int main()
     cout << "input mane file write: ";
     cin >> fout;
     cout << fin << " " << fout << endl;
-    int scale;
+    double scale;
     cout << "input scale: ";
     cin >> scale;
     Picture a;
