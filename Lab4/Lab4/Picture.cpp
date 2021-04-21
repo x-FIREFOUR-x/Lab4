@@ -170,6 +170,20 @@ void Picture::enlarge_picture(double scale)
     head.fileSize = head.biSizeImage + head.headerSize;
 }
 
+void Picture::reflectionVertical()
+{
+    Pixel_triplet** new_pixels = new Pixel_triplet * [head.height];
+    for (int i = 0; i < head.height; i++)
+        new_pixels[i] = new Pixel_triplet[head.width];
+    for (int i = 0; i < head.height; i++)
+    {
+        new_pixels[i] = pixels[head.height - i - 1];
+    }
+
+    pixels = new_pixels;
+    new_pixels = nullptr;
+}
+
 uint8_t Picture::interpolate(double x1, double y1, double x2, double y2, double z11, double z12, double z21, double z22, double x, double y)
 {
     double res;
