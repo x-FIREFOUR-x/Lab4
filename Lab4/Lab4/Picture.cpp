@@ -176,3 +176,56 @@ uint8_t Picture::interpolate(double x1, double y1, double x2, double y2, double 
     res = (z11 / ((x2 - x1) * (y2 - y1))) * (x2 - x) * (y2 - y) + (z12 / ((x2 - x1) * (y2 - y1))) * (x2 - x) * (y - y1) + (z21 / ((x2 - x1) * (y2 - y1))) * (x - x1) * (y2 - y) + (z22 / ((x2 - x1) * (y2 - y1))) * (x - x1) * (y - y1);
     return (uint8_t)res;
 }
+void Picture::reflection(int orientation)
+{
+    switch (orientation)
+    {
+    case 0: break;
+    case 1: 
+        reflection_horizontal(); 
+        break;
+    case 2: 
+        reflectionVertical();
+        break;
+    case 3: 
+        reflection_horizontal(); 
+        reflectionVertical(); 
+        break;
+    default: 
+        break;
+    }
+}
+void Picture::reflectionVertical()
+{
+    Pixel_triplet** new_pixels = new Pixel_triplet * [head.height];
+    for (int i = 0; i < head.height; i++)
+        new_pixels[i] = new Pixel_triplet[head.width];
+    for (int i = 0; i < head.height; i++)
+    {
+        new_pixels[i] = pixels[head.height - i - 1];
+    }
+
+    pixels = new_pixels;
+    new_pixels = nullptr;
+}
+void Picture::reflection_horizontal()
+{
+    Pixel_triplet** new_pixels = new Pixel_triplet* [head.height];
+    for (int i = 0; i < head.height; i++)
+        new_pixels[i] = new Pixel_triplet[head.width];
+
+    for (int i = 0; i < head.height ; i++)
+    {
+        for (int j = 0; j < head.width; j++)
+        {
+            new_pixels[i][j] = pixels[i][head.width - j - 1];
+        }
+    }
+
+    for (int i = 0; i < head.height; i++)
+        delete[] pixels[i];
+    delete[] pixels;
+
+    pixels = new_pixels;
+    new_pixels = nullptr;
+}
