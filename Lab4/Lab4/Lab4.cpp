@@ -19,6 +19,7 @@ int main(int argc, char* argv[])
     Picture pict;
     pict.read_picture(fin);
     pict.enlarge_picture(scale);
+    pict.reflection_horizontal();
     pict.write_picture(fout);
 
     cout << "Enlarging image " << scale << " times... Done." << endl;

@@ -13,5 +13,6 @@ public:
 	void write_picture(string);
 	void enlarge_picture(int);
 	void enlarge_picture(double);
+	void reflection_horizontal();
 };
 
