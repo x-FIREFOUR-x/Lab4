@@ -170,6 +170,31 @@ void Picture::enlarge_picture(double scale)
     head.fileSize = head.biSizeImage + head.headerSize;
 }
 
+uint8_t Picture::interpolate(double x1, double y1, double x2, double y2, double z11, double z12, double z21, double z22, double x, double y)
+{
+    double res;
+    res = (z11 / ((x2 - x1) * (y2 - y1))) * (x2 - x) * (y2 - y) + (z12 / ((x2 - x1) * (y2 - y1))) * (x2 - x) * (y - y1) + (z21 / ((x2 - x1) * (y2 - y1))) * (x - x1) * (y2 - y) + (z22 / ((x2 - x1) * (y2 - y1))) * (x - x1) * (y - y1);
+    return (uint8_t)res;
+}
+void Picture::reflection(int orientation)
+{
+    switch (orientation)
+    {
+    case 0: break;
+    case 1: 
+        reflection_horizontal(); 
+        break;
+    case 2: 
+        reflectionVertical();
+        break;
+    case 3: 
+        reflection_horizontal(); 
+        reflectionVertical(); 
+        break;
+    default: 
+        break;
+    }
+}
 void Picture::reflectionVertical()
 {
     Pixel_triplet** new_pixels = new Pixel_triplet * [head.height];
@@ -182,13 +207,6 @@ void Picture::reflectionVertical()
 
     pixels = new_pixels;
     new_pixels = nullptr;
-}
-
-uint8_t Picture::interpolate(double x1, double y1, double x2, double y2, double z11, double z12, double z21, double z22, double x, double y)
-{
-    double res;
-    res = (z11 / ((x2 - x1) * (y2 - y1))) * (x2 - x) * (y2 - y) + (z12 / ((x2 - x1) * (y2 - y1))) * (x2 - x) * (y - y1) + (z21 / ((x2 - x1) * (y2 - y1))) * (x - x1) * (y2 - y) + (z22 / ((x2 - x1) * (y2 - y1))) * (x - x1) * (y - y1);
-    return (uint8_t)res;
 }
 void Picture::reflection_horizontal()
 {
